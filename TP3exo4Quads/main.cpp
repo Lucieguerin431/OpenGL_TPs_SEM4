@@ -31,11 +31,13 @@ int main()
         Vertex2DColor{{-0.5f, -0.5f}, {1.f, 0.f, 0.f}}, // Premier sommet
         Vertex2DColor{{ 0.5f, -0.5f}, {0.f, 1.f, 0.f}}, // Deuxième sommet
         Vertex2DColor{{ -0.5f,  0.5f}, {0.f, 0.f, 1.f}},  // Troisième sommet
+        Vertex2DColor{{0.5f, 0.5f}, {1.f, 1.f, 0.f}}, // Premier sommet
+        Vertex2DColor{{ 0.5f, -0.5f}, {0.f, 1.f, 0.f}}, // Deuxième sommet
+        Vertex2DColor{{ -0.5f,  0.5f}, {0.f, 0.f, 1.f}}
     };
 
-
     // Send the vertices to the GPU
-    glBufferData(GL_ARRAY_BUFFER, 3 * sizeof(Vertex2DColor), vertices, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, 6 * sizeof(Vertex2DColor), vertices, GL_STATIC_DRAW);
 
     // Unbind the VBO to avoid modification
     glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -82,7 +84,7 @@ int main()
         shader.use();
 
         // Draw the triangle
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+        glDrawArrays(GL_TRIANGLES, 0, 6);
 
         // Unbind the VAO
         glBindVertexArray(0);
