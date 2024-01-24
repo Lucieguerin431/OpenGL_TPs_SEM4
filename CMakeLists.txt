@@ -52,4 +52,5 @@ add_exercise(TP3_exo2_triangle_couleurs)
 add_exercise(TP3_exo3_structure_vertex)
 add_exercise(TP3exo4Quads)
 add_exercise(TP3exo5Disque)
+add_exercise(TP3exo6IBO)
 

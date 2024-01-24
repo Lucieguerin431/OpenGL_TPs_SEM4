@@ -10,8 +10,8 @@ struct Vertex2DColor{
 
 int main()
 {
-    auto ctx = p6::Context{{1280, 720, "TP3 EX1"}};
-    ctx.maximize_window();
+    auto ctx = p6::Context{{720, 720, "TP3 EX5"}};
+    ctx.focus_window();
 
 
     const p6::Shader shader = p6::load_shader(
@@ -27,17 +27,31 @@ int main()
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
 
 
-    Vertex2DColor vertices[] = { 
-        Vertex2DColor{{-0.5f, -0.5f}, {1.f, 0.f, 0.f}}, // Premier sommet
-        Vertex2DColor{{ 0.5f, -0.5f}, {0.f, 1.f, 0.f}}, // Deuxième sommet
-        Vertex2DColor{{ -0.5f,  0.5f}, {0.f, 0.f, 1.f}},  // Troisième sommet
-        Vertex2DColor{{0.5f, 0.5f}, {1.f, 1.f, 0.f}}, // Premier sommet
-        Vertex2DColor{{ 0.5f, -0.5f}, {0.f, 1.f, 0.f}}, // Deuxième sommet
-        Vertex2DColor{{ -0.5f,  0.5f}, {0.f, 0.f, 1.f}}
-    };
+   // Define parameters for the disk
+    float radius = 0.5f;
+    int numTriangles = 60; // You can adjust this value
+
+    // Generate vertices for the disk
+    std::vector<Vertex2DColor> vertices;
+    for (int i = 0; i < numTriangles; ++i) {
+        float theta1 = (i * 2 * 3.141592) / numTriangles;
+        float theta2 = ((i + 1) * 2 * 3.141592) / numTriangles;
+
+        // Triangle center
+        glm::vec2 center(0.0f, 0.0f);
+
+        // Vertices
+        glm::vec2 v1(radius * glm::cos(theta1), radius * glm::sin(theta1));
+        glm::vec2 v2(radius * glm::cos(theta2), radius * glm::sin(theta2));
+
+        // Add vertices to the vector
+        vertices.push_back({center, {1.f, 0.f, 0.f}});
+        vertices.push_back({v1, {1.f, 0.f, 0.f}});
+        vertices.push_back({v2, {1.f, 0.f, 0.f}});
+    }
 
     // Send the vertices to the GPU
-    glBufferData(GL_ARRAY_BUFFER, 6 * sizeof(Vertex2DColor), vertices, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vertex2DColor), vertices.data(), GL_STATIC_DRAW);
 
     // Unbind the VBO to avoid modification
     glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -84,7 +98,7 @@ int main()
         shader.use();
 
         // Draw the triangle
-        glDrawArrays(GL_TRIANGLES, 0, 6);
+        glDrawArrays(GL_TRIANGLES, 0, vertices.size());
 
         // Unbind the VAO
         glBindVertexArray(0);
